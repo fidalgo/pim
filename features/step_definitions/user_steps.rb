@@ -132,6 +132,12 @@ When /^I look at the list of users$/ do
   visit '/'
 end
 
+When /^I recover a password with a valid email$/ do
+  visit '/users/password/new'
+  fill_in "user_email", :with => @visitor[:email]
+  click_button "Send me reset password instructions"
+end
+
 ### THEN ###
 Then /^I should be signed in$/ do
   page.should have_content "Logout"
@@ -189,3 +195,8 @@ Then /^I should see my name$/ do
   create_user
   page.should have_content @user[:name]
 end
+
+Then /^I see an successfull reset password message$/ do
+  page.should have_content "You will receive an email with instructions about how to reset your password in a few minutes."
+end
+
