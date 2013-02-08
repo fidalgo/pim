@@ -45,7 +45,6 @@ end
 
 When /^I go to the contacts listing$/ do
   #  contacts = FactoryGirl.create_list(:contact, 100)
-
   visit contacts_path
 end
 
@@ -63,16 +62,12 @@ Then /^I should return to contacts list$/ do
 end
 
 Then /^I should see the contact list ordered by name:$/ do |expected_table|
-#  rows = all(:xpath, "//table")
-#  table = rows.map { |r| r.all('th,td').map { |c| c.text.strip } }
-#table = find('table').all('tr').map { |row| row.all('th, td').map { |cell| cell.text.strip } }
-#puts table.hashes()
-#  expected_table.diff!(table, :missing_col => false)
 rows = find("table").all('tr')
 table = rows.map { |r| r.all('th,td').map { |c| c.text.strip } }
 expected_table.diff!(table)
 end
 
-Then /^show me the page$/ do
-  #save_and_open_page
+Then /^Show me the page$/ do
+save_and_open_page
 end
+
