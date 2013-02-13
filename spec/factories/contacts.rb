@@ -8,8 +8,6 @@ FactoryGirl.define do
   factory :contact do
     name {"#{first_names.sample} #{last_names.sample}"}
     email  {"#{name.downcase.gsub!(' ', '.')}@example.com"}
-    address {"#{name} Street"}
-    country "Portugal"
     vat_number {rand(9999999).to_s.center(7, rand(9).to_s)}
     gender {['male', 'female'].sample}
     birth_date {Date.today - rand(200..40000)}

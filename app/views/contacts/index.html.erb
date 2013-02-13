@@ -4,7 +4,8 @@
   <tr>
     <th>id</th>
     <th>Name</th>
-    <th>Address</th>
+    <th>Street</th>
+    <th>City</th>
     <th>Country</th>
     <th>Email</th>
     <th>VAT Number</th>
@@ -18,8 +19,9 @@
     <tr>
       <td><%= contact.id %></td>
       <td><%= contact.name %></td>
-      <td><%= contact.address %></td>
-      <td><%= contact.country %></td>
+      <td><%= contact.address.street %></td>
+      <td><%= contact.address.city %></td>
+      <td><%= contact.address.country %></td>
       <td><%= contact.email %></td>
       <td><%= contact.vat_number %></td>
       <td><%= contact.birth_date %></td>

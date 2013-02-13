@@ -5,11 +5,13 @@ def create_contact
   visit 'contacts/new'
   fill_in "Name", :with => 'Manuel Jośe'
   fill_in "Email", :with => "manuel.jose@example.com"
-  fill_in "Address", :with => "Rua D. Manuel, nº 35, 4200-031 Porto"
-  select('Portugal', :from => 'Country')
   fill_in "Vat number", :with => 111222333
   select('male', :from => 'Gender')
   select_date('31/12/1975', :from => 'Birth date')
+  fill_in "Street", :with => "Rua D. Manuel, nº 35"
+  fill_in "Postal code", :with => "4200-031"
+  fill_in "City", :with => 'Porto'
+  select('Portugal', :from => 'Country')
   click_button "Create Contact"
   find_contact
 end
@@ -26,8 +28,12 @@ def find_contact
 end
 
 ### GIVEN ###
-Given /^Exists the following contact records$/ do |table|
-  create_contact_list(table)
+Given /^Exists the following contacts$/ do |table|
+  #  create_contact_list(table)
+  table.each do |group|
+    address = group[:address]
+    address.update_attributes(:contact => group[:contact])
+  end
 end
 
 
@@ -37,9 +43,10 @@ When /^I create a contact with valid data$/ do
 end
 
 When /^I edit a contact with valid data$/ do
-  contact = FactoryGirl.create(:contact)
+  address = FactoryGirl.create(:address)
+  contact = FactoryGirl.create(:contact, :address => address)
   visit edit_contact_path(contact)
-  fill_in "Address", :with => "Avenida da Républica, nº 1080, 4250-220 Vila Nova de Gaia"
+  fill_in "Street", :with => "Avenida da Républica, nº 1080, 4250-220 Vila Nova de Gaia"
   click_button 'Update Contact'
 end
 
@@ -62,12 +69,19 @@ Then /^I should return to contacts list$/ do
 end
 
 Then /^I should see the contact list ordered by name:$/ do |expected_table|
-rows = find("table").all('tr')
-table = rows.map { |r| r.all('th,td').map { |c| c.text.strip } }
-expected_table.diff!(table)
+  rows = find("table").all('tr')
+  table = rows.map { |r| r.all('th,td').map { |c| c.text.strip } }
+  expected_table.diff!(table)
 end
 
 Then /^Show me the page$/ do
-save_and_open_page
+  save_and_open_page
 end
 
+Transform /^table:name,street,city,country,email,birth date,gender$/ do |table|
+  table.hashes.map do |hash|
+    contact = FactoryGirl.create(:contact, :name => hash["name"], :email => hash["email"], :birth_date => hash["birth date"], :gender => hash["gender"])
+    address = FactoryGirl.create(:address, :street => hash["street"], :city => hash["city"], :country => hash["country"])
+    {:contact => contact, :address => address}
+  end
+end

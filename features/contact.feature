@@ -16,17 +16,17 @@ Feature: Manage Contacts
         And I should return to contacts list
 
     Scenario: Listing contacts ordered by name
-        Given Exists the following contact records
-            |id|name|address|country|email|vat_number|birth_date|gender|
-            |1|Juan José|Calle del Juan 23, Madrid|Spain|juan@example.com|311900222|1970-02-12|male|
-            |2|John Doe|John Doe Street|Australia|john@example.com|111222333|1977-12-20|male|
-            |3|Manuela Silva|Rua da Alegria,Porto|Portugal|manuela@example.com|194321897|1986-12-20|female|
+        Given Exists the following contacts
+            |name|street|city|country|email|birth date|gender|
+            |Juan José|Calle del Juan 23|Madrid|Spain|juan@example.com|1970-02-12|male|
+            |John Doe|John Doe Street|Sidney|Australia|john@example.com|1977-12-20|male|
+            |Manuela Silva|Rua da Alegria|Porto|Portugal|manuela@example.com|1986-12-20|female|
         And we paginate after 2 contacts
         When I go to the contacts listing
         Then I should see the contact list ordered by name:
-            |id|Name|Address|Country|Email|VAT Number|Birth date|Gender|
-            |2|John Doe|John Doe Street|Australia|john@example.com|111222333|1977-12-20|male|
-            |1|Juan José|Calle del Juan 23, Madrid|Spain|juan@example.com|311900222|1970-02-12|male|
+            |Name|Street|City|Country|Email|Birth date|Gender|
+            |John Doe|John Doe Street|Sidney|Australia|john@example.com|1977-12-20|male|
+            |Juan José|Calle del Juan 23|Madrid|Spain|juan@example.com|1970-02-12|male|
         And I should see pagination
         And I should see the first page of pagination
         And I should see a link to the next page of pagination

@@ -6,7 +6,7 @@ module ApplicationHelper
     html = <<-HTML
     <div class="alert alert-error alert-block">
       <button type="button" class="close" data-dismiss="alert">&#215;</button>
-      #{messages}
+    #{messages}
     </div>
     HTML
     html.html_safe

@@ -27,6 +27,7 @@ class ContactsController < ApplicationController
   # GET /contacts/new.json
   def new
     @contact = Contact.new
+    @contact.build_address
 
     respond_to do |format|
       format.html # new.html.erb
