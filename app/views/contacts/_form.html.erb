@@ -11,15 +11,11 @@
       <%= f.input :birth_date,  :as => :date, :start_year => Date.today.year - 90,
         :end_year => Date.today.year - 12%>
     </fieldset>
-    <%= f.simple_fields_for :address do |a| %>
-      <fieldset>
-        <legend>Address</legend>
-        <%= a.input :street %>
-        <%= a.input :postal_code %>
-        <%= a.input :city %>
-        <%= a.input :country %>
-      </fieldset>
+    <%= f.simple_fields_for :addresses do |a| %>
+      <%= render "address_fields", :f => a %>
     <% end%>
+    <%= hidden_field_tag "last_id" %>
+    <p><%= link_to_add_fields "Add Address", f, :addresses %> </p>
   </div>
 
   <div class="form-actions">

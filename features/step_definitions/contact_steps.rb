@@ -2,10 +2,10 @@
 
 ### Utility methods ###
 def create_contact
-  visit 'contacts/new'
-  fill_in "Name", :with => 'Manuel Jośe'
+  visit '/contacts/new'
+  fill_in "Name", :with => 'Manuel Jose'
   fill_in "Email", :with => "manuel.jose@example.com"
-  fill_in "Vat number", :with => 111222333
+  fill_in "Vat number", :with => rand(9999999).to_s.center(7, rand(9).to_s)
   select('male', :from => 'Gender')
   select_date('31/12/1975', :from => 'Birth date')
   fill_in "Street", :with => "Rua D. Manuel, nº 35"
@@ -44,7 +44,8 @@ end
 
 When /^I edit a contact with valid data$/ do
   address = FactoryGirl.create(:address)
-  contact = FactoryGirl.create(:contact, :address => address)
+  contact = FactoryGirl.create(:contact)
+  address.update_attributes(:contact => contact)
   visit edit_contact_path(contact)
   fill_in "Street", :with => "Avenida da Républica, nº 1080, 4250-220 Vila Nova de Gaia"
   click_button 'Update Contact'
@@ -54,6 +55,17 @@ When /^I go to the contacts listing$/ do
   #  contacts = FactoryGirl.create_list(:contact, 100)
   visit contacts_path
 end
+
+When /^I add a new address to contact$/ do
+  contact =  create_contact
+  visit edit_contact_path(contact)
+  find_link('Add Address').visible?
+  click_link "Add Address"
+  last_id =   find(:xpath, "//input[@id='last_id']").value
+  page.fill_in "contact_addresses_attributes_#{last_id}_street", :with => 'Rua da Tristeza, nº 23'
+  click_button 'Update Contact'
+end
+
 
 ### THEN ###
 Then /^I should see a sucessfull create message$/ do
@@ -77,6 +89,13 @@ end
 Then /^Show me the page$/ do
   save_and_open_page
 end
+
+Then /^I should see both addresses$/ do
+  find_contact
+  visit edit_contact_path(@contact)
+  find(:xpath, "//input[@id='contact_addresses_attributes_1_street']").value == 'Rua da Tristeza, nº 23'
+end
+
 
 Transform /^table:name,street,city,country,email,birth date,gender$/ do |table|
   table.hashes.map do |hash|

@@ -15,6 +15,12 @@ Feature: Manage Contacts
         Then I should see a sucessfull edit message
         And I should return to contacts list
 
+    @javascript
+    Scenario: Add another address to a contact
+        When I add a new address to contact
+        Then I should see a sucessfull edit message
+        And I should see both addresses
+
     Scenario: Listing contacts ordered by name
         Given Exists the following contacts
             |name|street|city|country|email|birth date|gender|
